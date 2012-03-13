@@ -298,16 +298,39 @@ class Qis:
 		doLoginUrl = self.ROOT_URL + urllib.urlencode(loginUrlDict)
 		(rContent, rHeaders, rSessionId) = self._request('POST', doLoginUrl, loginBody, loginHeaders)
 
-		found = re.search(";asi=(.*?)\"", rContent)
-		if found:
-			asi = found.group(1)
+		asi = search_content_for_asi(rContent)
+
+		if asi:
 			if self.verbose > 1:
 				self.log.debug("asi=%s" % asi)
 		else:
-			self.log.error("No asi found")
-			raise Exception("Login failed.")
+			self.log.debug("Retrieve asi second try")
+			asi = self._getAsi(rSessionId)
+			if not asi:
+				self.log.error("No asi found")
+				raise Exception("Login failed.")
 
 		return(rSessionId, asi)
+
+	def _getAsi(self, rSessionId):
+		asiUrlDict = {
+						'state'				: 'change',
+						'type'				: '1',
+						'moduleParameter'	: 'studyPOSMenu'
+						#'category'			: 'auth.login',
+						#'startpage'			: 'portal.vm',
+						#'breadCrumbSource'	: 'portal',
+		}
+		asiHeaders = { 
+						'Cookie'			: rSessionId,
+						#'Content-Type'		: 'application/x-www-form-urlencoded',
+						#'Content-Length'	: 0
+		}
+
+		asiUrl = self.ROOT_URL + "state=change&type=1&moduleParameter=studyPOSMenu&nextdir=change&next=menu.vm&subdir=applications&xml=menu&purge=y&navigationPosition=functions%2CstudyPOSMenu&breadcrumb=studyPOSMenu&topitem=functions&subitem=studyPOSMenu"
+		(rContent, rHeaders, rSessionId) = self._request('GET', asiUrl, '', asiHeaders)
+
+		return search_content_for_asi(rContent)
 
 	def _doLogout(self, rSessionId):
 		"""
