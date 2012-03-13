@@ -128,7 +128,7 @@ def logTraceback(message, e, uselog=None):
 
 class Qis:
 	ROOT_URL = "/qisserver/rds?"
-	USER_AGENT = "qistool/1.0"
+	USER_AGENT = "qistool/1.1 github.com/doubleO8/qistool"
 
 	def _dumpBody(self, body):
 		for line in filter(lambda x: x.strip() != '', body.split("\n")):
