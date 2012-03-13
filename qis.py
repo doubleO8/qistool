@@ -103,6 +103,13 @@ def formatGrades(grades):
 	output.append("")
 	return "\n".join(output)
 
+def search_content_for_asi(rContent):
+	found = re.search(";asi=(.*?)\"", rContent)
+	if found:
+		asi = found.group(1)
+		return asi
+	return None
+
 def logTraceback(message, e, uselog=None):
 	"""
 	Exception traceback ausgeben.
