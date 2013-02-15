@@ -84,7 +84,7 @@ def formatGrades(grades):
 	dashes = 80
 
 	output.append("")
-	output.append(" NotenSpiegel")
+	output.append(" Notenspiegel")
 	output.append("=" * dashes)
 	for g in grades:
 		(Nr, Name, Note, ECTS) = (g['EDV_Nr'], g['Name'], g['Note'], g['ECTS'])
@@ -96,7 +96,7 @@ def formatGrades(grades):
 		else:
 			Note = "n/a"
 		Kurse += 1
-		output.append(" %d %-30s : %5s (%d ECTS)" % (Nr, Name, Note, ECTS) )
+		output.append(" %05d %-30s : %5s (%2d ECTS)" % (Nr, Name, Note, ECTS) )
 	output.append("-" * dashes)
 	gradesSum = math.fsum(gradesList)
 	output.append(" Veranstaltungen: %2d von %2d benotet, erreichte ECTS: %d, Schnitt: %2.3f" % (benoteteKurse, Kurse, sum_ECTS, gradesSum / sum_ECTS)) 
